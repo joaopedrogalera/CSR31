@@ -20,7 +20,7 @@ int main(){
   int len = sizeof(server);
 
 
-  printf("UTFPR\nTrabalho de Comunicação de dados\nCSR31-S71 2019.2\n\n");
+  printf("UTFPR\nTrabalho de Comunicação de dados\nCSR31-S71 2019.2\nCliente\n\n");
 
   printf("Insira o IP do servidor\n");
   scanf("%s",serv_addr);
@@ -50,15 +50,15 @@ int main(){
     printf("Insira a mensagem ou digite ** para sair:\n");
     fgets(mensagem,sizeof(mensagem),stdin);
 
-    if(strcmp(mensagem, "**") == 0){
-      break;
-    }
-
     /* Remove a nova linha (\n), caso ela tenha sido lida pelo fgets */
 		int indiceUltimoCaractere = strlen(mensagem) - 1;
 		if(mensagem[indiceUltimoCaractere] == '\n') {
 			mensagem[indiceUltimoCaractere] = '\0';
 		}
+
+    if(strcmp(mensagem, "**") == 0){
+      break;
+    }
 
     printf("Texto inserido:\n%s\n",mensagem);
     printf("Criptografado...");
@@ -131,6 +131,9 @@ int main(){
     send(sockfd, manchester, strlen(manchester), 0);
 
   }
+
+  //Encerra Comunicação
+  send(sockfd, "**", strlen("**"), 0);
   close(sockfd);
 
   return (0);

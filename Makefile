@@ -1,13 +1,19 @@
 ###########################MAKEFILE#########################
-all:envia
-csr31: envia.o
-	gcc -o csr31 envia.o
+all:envia recebe
+envia: envia.o
+	gcc -o envia envia.o
 
 envia.o: envia.c
 	gcc -c envia.c -Wall
+
+recebe: recebe.o
+	gcc -o recebe recebe.o
+
+recebe.o: recebe.c
+	gcc -c recebe.c -Wall
 
 clean:
 	rm -rf *.o
 
 mrproper: clean
-	rm -rf envia
+	rm -rf envia recebe
