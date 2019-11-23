@@ -1,16 +1,58 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <string.h>
+
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 
 int main(){
   char mensagem[100],aux;
   char bin[800];
   char manchester[1600];
+  char serv_addr[16];
+  int serv_port;
   int i,j,k;
+  struct sockaddr_in server;
+  int sockfd;
+  int len = sizeof(server);
+
+
   printf("UTFPR\nTrabalho de Comunicação de dados\nCSR31-S71 2019.2\n\n");
 
+  printf("Insira o IP do servidor\n");
+  scanf("%s",serv_addr);
+
+  printf("Insira a porta do servidor\n");
+  scanf("%d",&serv_port);
+
+  //Inicia socket cliente
+  if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1){
+    printf("Erro na criação do socket\n");
+    return(-1);
+  }
+
+  //Define propriedades da conexão
+  server.sin_family = AF_INET;
+  server.sin_port = htons(serv_port);
+  server.sin_addr.s_addr = inet_addr(serv_addr);
+  memset(server.sin_zero, 0x0, 8);
+
+  //Tenta conectar ao servidor
+  if(connect(sockfd, (struct sockaddr*) &server, len) == -1){
+    printf("Erro na conexão\n");
+    return(-1);
+  }
+
   while(1){
-    printf("Insira a mensagem ou pressione Ctrl + C para sair:\n");
+    printf("Insira a mensagem ou digite ** para sair:\n");
     fgets(mensagem,sizeof(mensagem),stdin);
+
+    if(strcmp(mensagem, "**") == 0){
+      break;
+    }
 
     /* Remove a nova linha (\n), caso ela tenha sido lida pelo fgets */
 		int indiceUltimoCaractere = strlen(mensagem) - 1;
@@ -63,8 +105,33 @@ int main(){
 
     printf("Manchester:\n%s\n",manchester);
 
+    //Imprime linha superior do grafico
+    for(i=0;manchester[i]!='\0';i++){
+      if(manchester[i]=='0'){
+        printf(" ");
+      }
+      else{
+        printf("_");
+      }
+    }
+    printf("\n\n");
+
+    //Imprime linha inferior do grafico
+    for(i=0;manchester[i]!='\0';i++){
+      if(manchester[i]=='0'){
+        printf("_");
+      }
+      else{
+        printf(" ");
+      }
+    }
+    printf("\n\n");
+
+    //Envia mensagem
+    send(sockfd, manchester, strlen(manchester), 0);
 
   }
+  close(sockfd);
 
   return (0);
 }

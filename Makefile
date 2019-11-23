@@ -10,4 +10,4 @@ clean:
 	rm -rf *.o
 
 mrproper: clean
-	rm -rf csr31
+	rm -rf envia
