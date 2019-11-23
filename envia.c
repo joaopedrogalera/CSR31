@@ -70,6 +70,10 @@ int main(){
 
     printf("Mensagem criptografada:\n%s\n",mensagem);
 
+    for(i=0;mensagem[i]!='\0';i++){
+      printf("%d\n",mensagem[i]);
+    }
+
     //Transforma em binário
     k=0;
     for(i=0;mensagem[i]!='\0';i++){
@@ -101,7 +105,7 @@ int main(){
       }
       k += 2;
     }
-    manchester[k-1] = '\0';
+    manchester[k] = '\0';
 
     printf("Manchester:\n%s\n",manchester);
 

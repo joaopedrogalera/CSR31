@@ -19,6 +19,8 @@ int main(){
   socklen_t client_len = sizeof(client);
   int i,k;
   char bin[800];
+  char mensagem[100];
+  unsigned char caracter;
 
   printf("UTFPR\nTrabalho de Comunicação de dados\nCSR31-S71 2019.2\nServidor\n\n");
 
@@ -67,7 +69,7 @@ int main(){
       if(strcmp(manchester,"**")==0){
         break;
       }
-      printf("Manchester: %s\n", manchester);
+      printf("Manchester: \n%s\n", manchester);
 
       //Imprime linha superior do grafico
       for(i=0;manchester[i]!='\0';i++){
@@ -91,6 +93,7 @@ int main(){
       }
       printf("\n\n");
 
+      //Converte para binário
       i=0;
       k=0;
       while (manchester[i]!='\0'){
@@ -104,8 +107,52 @@ int main(){
         i += 2;
       }
       bin[k] = '\0';
-      printf("%s\n", bin);
+      printf("Binário:\n%s\n", bin);
 
+      //Converte para msg criptografada
+      i=0;
+      k=0;
+      while(bin[i]!='\0'){
+        caracter = 0;
+        if(bin[i]=='1'){
+          caracter += 0x80;
+        }
+        if(bin[i+1]=='1'){
+          caracter += 0x40;
+        }
+        if(bin[i+2]=='1'){
+          caracter += 0x20;
+        }
+        if(bin[i+3]=='1'){
+          caracter += 0x10;
+        }
+        if(bin[i+4]=='1'){
+          caracter += 0x08;
+        }
+        if(bin[i+5]=='1'){
+          caracter += 0x04;
+        }
+        if(bin[i+6]=='1'){
+          caracter += 0x02;
+        }
+        if(bin[i+7]=='1'){
+          caracter += 0x01;
+        }
+        i += 8;
+        mensagem[k] = caracter;
+        k++;
+      }
+      mensagem[k]='\0';
+
+      printf("Mensagem criptografada:\n%s\n", mensagem);
+
+
+      //Descriptografa
+      for(i=0;mensagem[i]!='\0';i++){
+        mensagem[i] *= (char) -1;
+      }
+
+      printf("Mensagem descriptografada:\n%s\n", mensagem);
 
     }
   }
