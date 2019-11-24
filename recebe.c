@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 
@@ -24,20 +25,20 @@ int main(){
 
   printf("UTFPR\nTrabalho de Comunicação de dados\nCSR31-S71 2019.2\nServidor\n\n");
 
-
-  //Inicia socket
   printf("Insira a porta do servidor\n");
   scanf("%d",&serv_port);
 
-  server.sin_family = AF_INET;
-  server.sin_port = htons(serv_port);
-  memset(server.sin_zero, 0x0, 8);
-
+  //Inicia socket
   if((serverfd=socket(AF_INET,SOCK_STREAM,0))==-1){
     printf("Erro ao criar socket\n");
     return(-1);
   }
+  //Configura parametros do socket
+  server.sin_family = AF_INET;
+  server.sin_port = htons(serv_port);
+  memset(server.sin_zero, 0x0, 8);
 
+  //Seta porta
   if(setsockopt(serverfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int))==-1){
     printf("Erro ao setar porta\n");
     return(-1);
@@ -47,6 +48,8 @@ int main(){
     printf("Erro ao setar porta\n");
     return(-1);
   }
+
+  printf("Aguardando conexão\n");
 
   //Espera conexões
   if(listen(serverfd, 1) == -1){
@@ -63,9 +66,12 @@ int main(){
     //Zera buffer
     memset(manchester,0x0,BUFFER_LENGTH);
 
+    printf("Aguardando mensagem...\n");
+
     //Recebe msg
     if((msg_len = recv(clientfd, manchester, BUFFER_LENGTH, 0)) > 0) {
       manchester[msg_len] = '\0';
+      //Condição de saída
       if(strcmp(manchester,"**")==0){
         break;
       }
@@ -156,7 +162,7 @@ int main(){
 
     }
   }
-
+  printf("Saindo...\n");
   close(clientfd);
   close(serverfd);
   return (0);
