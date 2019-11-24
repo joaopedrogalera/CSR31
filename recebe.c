@@ -8,6 +8,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include "plotg.h"
+
 #define BUFFER_LENGTH 1600
 
 int main(){
@@ -77,27 +79,11 @@ int main(){
       }
       printf("Manchester: \n%s\n", manchester);
 
-      //Imprime linha superior do grafico
-      for(i=0;manchester[i]!='\0';i++){
-        if(manchester[i]=='0'){
-          printf(" ");
-        }
-        else{
-          printf("_");
-        }
-      }
-      printf("\n\n");
 
-      //Imprime linha inferior do grafico
-      for(i=0;manchester[i]!='\0';i++){
-        if(manchester[i]=='0'){
-          printf("_");
-        }
-        else{
-          printf(" ");
-        }
+      //Gera Gráfico
+      if(plotg(manchester)==-1){
+        return(-1);
       }
-      printf("\n\n");
 
       //Converte para binário
       i=0;

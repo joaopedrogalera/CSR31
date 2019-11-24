@@ -8,6 +8,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include "plotg.h"
 
 int main(){
   char mensagem[100],aux;
@@ -112,27 +113,10 @@ int main(){
 
     printf("Manchester:\n%s\n",manchester);
 
-    //Imprime linha superior do grafico
-    for(i=0;manchester[i]!='\0';i++){
-      if(manchester[i]=='0'){
-        printf(" ");
-      }
-      else{
-        printf("_");
-      }
+    //Gera gráfico
+    if(plotg(manchester)==-1){
+      return(-1);
     }
-    printf("\n\n");
-
-    //Imprime linha inferior do grafico
-    for(i=0;manchester[i]!='\0';i++){
-      if(manchester[i]=='0'){
-        printf("_");
-      }
-      else{
-        printf(" ");
-      }
-    }
-    printf("\n\n");
 
     //Envia mensagem
     send(sockfd, manchester, strlen(manchester), 0);
