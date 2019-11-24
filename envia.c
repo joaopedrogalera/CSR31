@@ -61,7 +61,7 @@ int main(){
     }
 
     printf("Texto inserido:\n%s\n",mensagem);
-    printf("Criptografado...");
+    printf("Criptografando...");
 
     //Criptografia faz o complemento de 2 de cada byte
     for(i=0;mensagem[i]!='\0';i++){
@@ -69,10 +69,6 @@ int main(){
     }
 
     printf("Mensagem criptografada:\n%s\n",mensagem);
-
-    for(i=0;mensagem[i]!='\0';i++){
-      printf("%d\n",mensagem[i]);
-    }
 
     //Transforma em binário
     k=0;
